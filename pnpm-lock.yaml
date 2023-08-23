@@ -14,6 +14,9 @@ dependencies:
   '@lucia-auth/oauth':
     specifier: ^2.2.0
     version: 2.2.0(lucia@2.4.0)
+  '@octokit/request-error':
+    specifier: ^5.0.0
+    version: 5.0.0
   '@planetscale/database':
     specifier: ^1.11.0
     version: 1.11.0
@@ -61,6 +64,9 @@ devDependencies:
   '@commitlint/config-conventional':
     specifier: ^17.7.0
     version: 17.7.0
+  '@octokit/types':
+    specifier: ^11.1.0
+    version: 11.1.0
   '@playwright/test':
     specifier: ^1.28.1
     version: 1.37.1
@@ -1107,7 +1113,6 @@ packages:
 
   /@octokit/openapi-types@18.0.0:
     resolution: {integrity: sha512-V8GImKs3TeQRxRtXFpG2wl19V7444NIOTDF24AWuIbmNaNYOQMWRbjcGDXV5B+0n887fgDcuMNOmlul+k+oJtw==}
-    dev: false
 
   /@octokit/plugin-paginate-graphql@4.0.0(@octokit/core@5.0.0):
     resolution: {integrity: sha512-7HcYW5tP7/Z6AETAPU14gp5H5KmCPT3hmJrS/5tO7HIgbwenYmgw4OY9Ma54FDySuxMwD+wsJlxtuGWwuZuItA==}
@@ -1185,7 +1190,6 @@ packages:
     resolution: {integrity: sha512-Fz0+7GyLm/bHt8fwEqgvRBWwIV1S6wRRyq+V6exRKLVWaKGsuy6H9QFYeBVDV7rK6fO3XwHgQOPxv+cLj2zpXQ==}
     dependencies:
       '@octokit/openapi-types': 18.0.0
-    dev: false
 
   /@octokit/webhooks-methods@4.0.0:
     resolution: {integrity: sha512-M8mwmTXp+VeolOS/kfRvsDdW+IO0qJ8kYodM/sAysk093q6ApgmBXwK1ZlUvAwXVrp/YVHp6aArj4auAxUAOFw==}

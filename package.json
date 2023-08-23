@@ -20,6 +20,7 @@
 	"devDependencies": {
 		"@commitlint/cli": "^17.7.1",
 		"@commitlint/config-conventional": "^17.7.0",
+		"@octokit/types": "^11.1.0",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-vercel": "^3.0.3",
 		"@sveltejs/kit": "^1.20.4",
@@ -54,6 +55,7 @@
 		"@chronark/access-policies": "^0.0.2",
 		"@lucia-auth/adapter-mysql": "^2.0.0",
 		"@lucia-auth/oauth": "^2.2.0",
+		"@octokit/request-error": "^5.0.0",
 		"@planetscale/database": "^1.11.0",
 		"@upstash/qstash": "^0.3.6",
 		"@upstash/redis": "^1.22.0",
