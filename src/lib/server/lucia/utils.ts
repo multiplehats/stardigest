@@ -8,19 +8,30 @@ import { ACCESS_TOKEN_SECRET } from '$env/static/private';
 import * as crypto from 'crypto';
 
 export const encryptAccessToken = (token: string): string => {
-	const cipher = crypto.createCipheriv('aes-256-ctr', ACCESS_TOKEN_SECRET, ACCESS_TOKEN_SECRET);
-	const encrypted = Buffer.concat([cipher.update(token), cipher.final()]);
+	const ENCRYPTION_KEY = Buffer.from(ACCESS_TOKEN_SECRET, 'hex'); // use Buffer to convert hex string to Uint8Array
+	const iv = crypto.randomBytes(16);
+	const cipher = crypto.createCipheriv('aes-256-ctr', ENCRYPTION_KEY, iv);
+	const encrypted = Buffer.concat([cipher.update(token, 'utf8'), cipher.final()]);
 
-	return encrypted.toString('hex');
+	return iv.toString('hex') + ':' + encrypted.toString('hex');
 };
 
-export const decryptAccessToken = (token: string): string => {
-	const decipher = crypto.createDecipheriv('aes-256-ctr', ACCESS_TOKEN_SECRET, ACCESS_TOKEN_SECRET);
-	const arrayBuffer = Buffer.from(token, 'hex');
-	const decrypted = Buffer.concat([decipher.update(arrayBuffer), decipher.final()]);
+export const decryptAccessToken = (encryptedToken: string): string => {
+	const encryptedArray = encryptedToken.split(':');
+	const iv = Buffer.from(encryptedArray[0], 'hex');
+	const encrypted = encryptedArray[1];
 
-	return decrypted.toString();
+	const decipher = crypto.createDecipheriv(
+		'aes-256-ctr',
+		Buffer.from(ACCESS_TOKEN_SECRET, 'hex'),
+		iv
+	);
+	let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+	decrypted += decipher.final('utf8');
+
+	return decrypted;
 };
+
 
 /**
  * Generate a default policy for the user.
