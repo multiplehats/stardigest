@@ -2,10 +2,8 @@ import { ZGeneralSettingsFormSchema } from '$components/app/app-general-settings
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
-import { db } from '$lib/server/drizzle/db';
-import { TIMEZONE, type WEEKDAY } from '$lib/types';
+import type { WEEKDAY } from '$lib/types';
 import { schema } from '$lib/server/drizzle';
-import { eq } from 'drizzle-orm';
 import { UserService } from '$lib/services/users';
 import { ErrorCode } from '$lib/utils/error-class';
 import { NewsletterService } from '$lib/services/newsletter';
@@ -64,7 +62,8 @@ export const actions = {
 				console.log('subscribing', { email });
 				await newsletterService.subscribe({
 					email,
-					timezone: TIMEZONE['America/New_York'],
+					// TODO: Implement timezone
+					timezone: user.timezone,
 					day: day as WEEKDAY
 				});
 			} else {

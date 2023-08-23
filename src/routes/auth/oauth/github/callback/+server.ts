@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 import { OAuthRequestError } from '@lucia-auth/oauth';
 import { STATE_COOKIE } from '$lib/auth/types';
 import { getUserForOAuth } from '$lib/server/lucia/utils';
+import { SETTINGS_PATH } from '$lib/config/routes';
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get(STATE_COOKIE.GITHUB_OAUTH_STATE);
@@ -52,7 +53,8 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/'
+				// TODO: Change to onboarding.
+				Location: SETTINGS_PATH
 			}
 		});
 	} catch (e) {

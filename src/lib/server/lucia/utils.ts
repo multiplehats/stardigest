@@ -63,7 +63,7 @@ export const defaultUserCreateAttributes = (userId: string) =>
 		github_token_updated_at: null,
 		policy: defaultUserPolicy(userId),
 		day: WEEKDAY.FRIDAY.toString(),
-		timezone: TIMEZONE['America/Los_Angeles'],
+		timezone: TIMEZONE['America/New_York'],
 		emailNewsletter: null
 	} satisfies Omit<User, 'id' | 'email'>);
 
