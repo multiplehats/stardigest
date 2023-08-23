@@ -11,26 +11,24 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-	    const params = window.location.search
+		const params = window.location.search;
 
-	    window.opener.postMessage({ source: PROVIDER_POST_MESSAGE_SOURCE, payload: { params } }, window.location.origin);
-	    window.close();
-	})
+		window.opener.postMessage(
+			{ source: PROVIDER_POST_MESSAGE_SOURCE, payload: { params } },
+			window.location.origin
+		);
+		window.close();
+	});
 </script>
 
 <div class="min-h-screen flex flex-col items-center justify-center">
 	<Card.Root>
 		<Card.Header>
-			<Card.Title class="text-lg">
-                Please wait while we redirect you...
-            </Card.Title>
+			<Card.Title class="text-lg">Please wait while we redirect you...</Card.Title>
 		</Card.Header>
-		<Card.Content class="flex flex-row items-center"
-        >
-            <Icons.spinner class="mr-2 h-4 w-4 animate-spin" />
-            <span class="text-sm">
-                This page will close automatically.
-            </span>
+		<Card.Content class="flex flex-row items-center">
+			<Icons.spinner class="mr-2 h-4 w-4 animate-spin" />
+			<span class="text-sm"> This page will close automatically. </span>
 		</Card.Content>
 	</Card.Root>
 </div>

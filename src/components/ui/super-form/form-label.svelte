@@ -1,0 +1,14 @@
+<script lang="ts">
+	import { Label } from '$components/ui/label';
+	import { getContext } from 'svelte';
+	import type { FormFieldContext } from './types';
+	import { cn } from '$lib/utils';
+	let className: string | undefined | null = undefined;
+	export { className as class };
+
+	const { formItemId, errors } = getContext<FormFieldContext>('FormField');
+</script>
+
+<Label class={cn($errors && 'text-destructive', className)} for={formItemId}>
+	<slot />
+</Label>

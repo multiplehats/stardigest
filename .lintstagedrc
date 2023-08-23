@@ -1,5 +1,6 @@
 {
 	"src/**/*.{js,ts,svelte}": [
-		"eslint --fix"
-	]
+		"pnpm format",
+		"pnpm lint",
+	],
 }

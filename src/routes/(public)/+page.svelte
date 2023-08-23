@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	async function handleSignOut() {
 		const response = await fetch('/auth/signout', {
 			method: 'POST',
@@ -15,4 +14,3 @@
 
 <a href="/auth">Login</a>
 <button on:click={handleSignOut}>Sign Out</button>
-

@@ -1,6 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 
-import type { AuthRequest } from 'lucia';
+import type { AuthRequest, Session as LuciaSession } from 'lucia';
 import type { User, Session } from '$lib/server/drizzle';
 import type { Auth as LuciaAuth } from '$lib/server/lucia';
 
@@ -11,7 +11,10 @@ declare global {
 	namespace App {
 		interface Locals {
 			auth: AuthRequest;
-			session: Session | null;
+			session: LuciaSession | null;
+		}
+		interface PageData {
+			session: LuciaSession | null;
 		}
 	}
 }
@@ -21,14 +24,10 @@ declare global {
 	namespace Lucia {
 		type Auth = LuciaAuth;
 		// eslint-disable-next-line @typescript-eslint/no-empty-interface
-		// type DatabaseUserAttributes = {
-		// 	github_username: string;
-		// };
 		type DatabaseUserAttributes = Omit<User, 'id'>;
 
 		// eslint-disable-next-line @typescript-eslint/no-empty-interface
 		type DatabaseSessionAttributes = Record<string | keyof Session, never>;
-		// type DatabaseSessionAttributes = {};
 	}
 }
 

@@ -10,7 +10,8 @@ const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 const ID_LENGTH = 12;
 
 const prefixes: Record<string, string> = {
-	user: 'user'
+	user: 'user',
+	newsletter: 'newsletter'
 } as const;
 // Max length of id will be 12 (id length) + 1 (underscore) + 9 (prefix length) = 22
 

@@ -17,8 +17,8 @@
 					<Card.Title class="text-2xl">Welcome back</Card.Title>
 					<Card.Description>
 						<p class="text-sm">
-							Use your Github account to login or sign up for an account.
-							Don't worry, we'll only access your public information and email address.
+							Use your Github account to login or sign up for an account. Don't worry, we'll only
+							access your public information and email address.
 						</p>
 					</Card.Description>
 				</Card.Header>

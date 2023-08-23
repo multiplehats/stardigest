@@ -1,7 +1,9 @@
 import { APP_ROUTE, SIGNIN_PATH, SIGNIN_ROUTE } from '$lib/config/routes';
+import { db } from '$lib/server/drizzle/db';
 import { auth } from '$lib/server/lucia';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+
 // import { APP_ROUTE, AUTH_PATH, SIGNIN_PATH, SIGNUP_PATH } from '$lib/config/routes';
 
 /**
@@ -10,8 +12,6 @@ import { sequence } from '@sveltejs/kit/hooks';
  */
 const auth_handle: Handle = async ({ event, resolve }) => {
 	event.locals.auth = auth.handleRequest(event);
-
-	// @ts-expect-error - Waiting on thread in Lucia discord: "Outdated docs or?"
 	event.locals.session = await event.locals.auth.validate();
 
 	return resolve(event);

@@ -1,5 +1,5 @@
-import { fontFamily } from "tailwindcss/defaultTheme";
-import tailwindcssAnimate from "tailwindcss-animate";
+import { fontFamily } from 'tailwindcss/defaultTheme';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -10,7 +10,7 @@ const config = {
 			center: true,
 			padding: '2rem',
 			screens: {
-				'2xl': '1400px'
+				'2xl': '1200px'
 			}
 		},
 		extend: {

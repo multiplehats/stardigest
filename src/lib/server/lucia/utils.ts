@@ -32,7 +32,6 @@ export const decryptAccessToken = (encryptedToken: string): string => {
 	return decrypted;
 };
 
-
 /**
  * Generate a default policy for the user.
  */
@@ -107,6 +106,7 @@ export const getUserForOAuth = async ({
 			name: name,
 			email: email,
 			emailVerified: emailVerified,
+			github_username: github_username,
 			github_access_token: encryptAccessToken(github_tokens.accessToken),
 			github_token_expires_at: github_tokens?.accessTokenExpiresIn
 				? new Date(Date.now() + github_tokens.accessTokenExpiresIn * 1000)

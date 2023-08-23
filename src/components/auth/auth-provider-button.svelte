@@ -7,7 +7,7 @@
 	import Button from '$components/ui/button/button.svelte';
 	import { Icons } from '$components/icons';
 
-	export let provider: ProviderItem
+	export let provider: ProviderItem;
 
 	let isLoading = false;
 	let windowObjectReference: Window | null = null;

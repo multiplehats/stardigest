@@ -18,7 +18,9 @@ export const auth = lucia({
 	env: dev ? 'DEV' : 'PROD',
 	getUserAttributes: (data) => {
 		return {
+			githubUsername: data.github_username,
 			userId: data.id,
+			name: data.name,
 			email: data.email
 		};
 	}

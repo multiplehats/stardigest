@@ -1,16 +1,16 @@
+import { relations } from 'drizzle-orm';
+
 import {
 	mysqlTable,
 	index,
 	unique,
 	varchar,
 	datetime,
-	mysqlEnum,
 	bigint,
-	timestamp,
-	int,
-	boolean
+	timestamp
 } from 'drizzle-orm/mysql-core';
 import { POLICY_LENGTH, USER_ID_LENGTH } from '../constants';
+import { newsletter } from './newsletter.schema';
 
 export const users = mysqlTable(
 	'users',
@@ -19,7 +19,7 @@ export const users = mysqlTable(
 		createdAt: timestamp('createdAt').defaultNow().onUpdateNow(),
 		updatedAt: timestamp('updatedAt').defaultNow().onUpdateNow(),
 		name: varchar('name', { length: 191 }),
-		email: varchar('email', { length: 191 }).notNull(),
+		email: varchar('email', { length: 320 }).notNull(),
 		emailVerified: datetime('emailVerified', { fsp: 3 }),
 		policy: varchar('policy', { length: POLICY_LENGTH }),
 		github_username: varchar('github_username', { length: 100 }),
@@ -37,12 +37,6 @@ export const users = mysqlTable(
 	}
 );
 
-// user: User;
-// sessionId: string;
-// activePeriodExpiresAt: Date;
-// idlePeriodExpiresAt: Date;
-// state: "idle" | "active";
-// fresh: boolean;
 export const sessions = mysqlTable(
 	'sessions',
 	{
@@ -50,8 +44,6 @@ export const sessions = mysqlTable(
 		activeExpires: bigint('active_expires', { mode: 'number' }).notNull(),
 		idleExpires: bigint('idle_expires', { mode: 'number' }).notNull(),
 		userId: varchar('user_id', { length: USER_ID_LENGTH }).notNull()
-		// fresh: boolean('fresh').notNull(),
-		// state: mysqlEnum('state', ['active', 'idle']).notNull()
 	},
 	(table) => {
 		return {
@@ -75,3 +67,7 @@ export const keys = mysqlTable(
 		};
 	}
 );
+
+export const userRelations = relations(users, ({ one }) => ({
+	newsletter: one(newsletter)
+}));
