@@ -21,7 +21,7 @@ export class UserService {
 	}
 
 	private async canUpdate() {
-		const grid: GRID = `xx::user::${this.user.id}`;
+		const grid: GRID = `${this.user.id}::user::${this.user.id}`;
 
 		if (!this.policy) {
 			throw new ErrorCode(ErrCode.Unauthorized, 'User has no policy.');

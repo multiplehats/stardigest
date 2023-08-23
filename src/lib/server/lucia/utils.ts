@@ -7,6 +7,7 @@ import { auth } from '$lib/server/lucia';
 import { ACCESS_TOKEN_SECRET } from '$env/static/private';
 import * as crypto from 'crypto';
 import { TIMEZONE, WEEKDAY } from '$lib/types';
+import { NewsletterService } from '$lib/services/newsletter';
 
 export const encryptAccessToken = (token: string): string => {
 	const ENCRYPTION_KEY = Buffer.from(ACCESS_TOKEN_SECRET, 'hex'); // use Buffer to convert hex string to Uint8Array
@@ -117,6 +118,14 @@ export const getUserForOAuth = async ({
 			// @ts-expect-error - github_refresh_token is not in the type
 			github_refresh_token: github_tokens.refreshToken
 		}
+	});
+
+	const newsletter = new NewsletterService(user.id);
+
+	await newsletter.subscribe({
+		email: email,
+		timezone: user.timezone as TIMEZONE,
+		day: user.day as unknown as WEEKDAY
 	});
 
 	return user;

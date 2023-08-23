@@ -2,7 +2,8 @@
 	import { z } from 'zod';
 	export const ZGeneralSettingsFormSchema = z.object({
 		email: z.string({ required_error: 'Please select an email to display' }).email(),
-		day: z.nativeEnum(WEEKDAY).optional()
+		day: z.nativeEnum(WEEKDAY).optional(),
+		enabled: z.boolean()
 	});
 	export type ZGeneralSettingsFormSchema = typeof ZGeneralSettingsFormSchema;
 	export type ProfileFormValues = z.infer<typeof ZGeneralSettingsFormSchema>;
@@ -14,6 +15,7 @@
 	import { Input } from '$components/ui/input';
 	import { Button } from '$components/ui/button';
 	import * as Select from '$components/ui/select';
+	import { Switch } from '$components/ui/switch';
 	import { WEEKDAY, WEEKDAYS_FORMATTED } from '$lib/types';
 
 	export let data: SuperValidated<ZGeneralSettingsFormSchema>;
@@ -27,6 +29,21 @@
 	method="POST"
 	class="space-y-8"
 >
+	<Form.Field
+		{form}
+		name="enabled"
+		class="flex flex-row items-center justify-between rounded-lg border p-4"
+		let:field
+	>
+		<div class="space-y-0.5">
+			<Form.Label class="text-base">Receive emails</Form.Label>
+			<Form.Description>Receive emails about your GitHub stars.</Form.Description>
+		</div>
+		{@const { value, name, ...rest } = field.attrs}
+		<Switch {...rest} checked={value} onCheckedChange={field.updateValue} />
+		<input hidden {name} {value} />
+	</Form.Field>
+
 	<Form.Field {form} name="email" let:field>
 		<Form.Label>Email</Form.Label>
 		<Input placeholder="shadcn" {...field.attrs} on:input={field.handleInput} />

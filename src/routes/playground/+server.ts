@@ -2,11 +2,12 @@ import { decryptAccessToken } from '$lib/server/lucia/utils';
 import { GithubService } from '$lib/services/github';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { NewsletterService } from '$lib/services/newsletter/newsletter.service';
 
-export const GET: RequestHandler = async () => {
-	const githubService = new GithubService('', 'user_rhlw4c0czhh0');
+export const GET: RequestHandler = async ({ locals }) => {
+	const newsletter = new NewsletterService(locals.user);
 
-	const stars = await githubService.getUniqueRandomStars();
+	await newsletter.subscribe('test');
 
-	return json(stars);
+	return new Response();
 };

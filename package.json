@@ -53,6 +53,8 @@
 	"type": "module",
 	"dependencies": {
 		"@chronark/access-policies": "^0.0.2",
+		"@js-joda/core": "^5.5.3",
+		"@js-joda/timezone": "^2.18.0",
 		"@lucia-auth/adapter-mysql": "^2.0.0",
 		"@lucia-auth/oauth": "^2.2.0",
 		"@octokit/request-error": "^5.0.0",

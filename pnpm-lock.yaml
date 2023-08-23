@@ -8,6 +8,12 @@ dependencies:
   '@chronark/access-policies':
     specifier: ^0.0.2
     version: 0.0.2
+  '@js-joda/core':
+    specifier: ^5.5.3
+    version: 5.5.3
+  '@js-joda/timezone':
+    specifier: ^2.18.0
+    version: 2.18.0(@js-joda/core@5.5.3)
   '@lucia-auth/adapter-mysql':
     specifier: ^2.0.0
     version: 2.0.0(@planetscale/database@1.11.0)(lucia@2.4.0)(mysql2@3.6.0)
@@ -900,6 +906,18 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@js-joda/core@5.5.3:
+    resolution: {integrity: sha512-7dqNYwG8gCt4hfg5PKgM7xLEcgSBcx/UgC92OMnhMmvAnq11QzDFPrxUkNR/u5kn17WWLZ8beZ4A3Qrz4pZcmQ==}
+    dev: false
+
+  /@js-joda/timezone@2.18.0(@js-joda/core@5.5.3):
+    resolution: {integrity: sha512-NjNDwj2AuFzVgW1XvKq3t0oH/BwK+Zsu6TiCsDkQZFx4h3W3oKgmUJUKleMBHMFJvh7sQRTK9hSqK/6izBuyAA==}
+    peerDependencies:
+      '@js-joda/core': '>=1.11.0'
+    dependencies:
+      '@js-joda/core': 5.5.3
+    dev: false
 
   /@lucia-auth/adapter-mysql@2.0.0(@planetscale/database@1.11.0)(lucia@2.4.0)(mysql2@3.6.0):
     resolution: {integrity: sha512-8a4JZ3VjDyRu/mAop2hEt/jOJO2HXwWIAid6a4wGiR8wgnlyOws9brRc+/wxQHSOlWUlrWemrfDvXLs5mMtkeQ==}
