@@ -21,6 +21,7 @@ export class Policy extends GenericPolicy<Resources, GRID> {
 		return Policy.parse(JSON.stringify(json));
 	}
 }
+export type TPolicy = GenericPolicy<Resources, GRID>;
 
 export function getPolicyGridBreakdown(grid: string): {
 	userIdOrCompanyId: string;

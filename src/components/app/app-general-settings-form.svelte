@@ -2,7 +2,7 @@
 	import { z } from 'zod';
 	export const ZGeneralSettingsFormSchema = z.object({
 		email: z.string({ required_error: 'Please select an email to display' }).email(),
-		weekday: z.nativeEnum(WEEKDAY).optional()
+		day: z.nativeEnum(WEEKDAY).optional()
 	});
 	export type ZGeneralSettingsFormSchema = typeof ZGeneralSettingsFormSchema;
 	export type ProfileFormValues = z.infer<typeof ZGeneralSettingsFormSchema>;
@@ -37,10 +37,10 @@
 		<Form.Message />
 	</Form.Field>
 
-	<Form.Field {form} name="weekday" let:field>
+	<Form.Field {form} name="day" let:field>
 		<Form.Label>On what day of the week do you want to receive star reminders?</Form.Label>
 
-		<Select.Root onValueChange={field.updateValue}>
+		<Select.Root value={formValues.day} onValueChange={field.updateValue}>
 			<Select.Trigger {...field.attrs}>
 				<Select.Value placeholder="Select a day" />
 				<Select.Input name={field.attrs.name} />
@@ -52,9 +52,10 @@
 				{/each}
 			</Select.Content>
 		</Select.Root>
+
 		<Form.Description>
-			{#if formValues.weekday}
-				You will receive a star reminder on {WEEKDAYS_FORMATTED[formValues.weekday].label}.
+			{#if formValues.day}
+				You will receive a star reminder on {WEEKDAYS_FORMATTED[formValues.day].label}.
 			{:else}
 				You will receive a star reminder every Friday.
 			{/if}
@@ -62,5 +63,5 @@
 		<Form.Message />
 	</Form.Field>
 
-	<Button type="submit">Update profile</Button>
+	<Button type="submit">Update settings</Button>
 </Form.Root>

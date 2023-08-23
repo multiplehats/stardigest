@@ -2,7 +2,7 @@
 
 import type { AuthRequest, Session as LuciaSession } from 'lucia';
 import type { User, Session } from '$lib/server/drizzle';
-import type { Auth as LuciaAuth } from '$lib/server/lucia';
+import type { Auth as LuciaAuth, User as LuciaUser } from '$lib/server/lucia';
 
 declare global {
 	/**
@@ -12,6 +12,7 @@ declare global {
 		interface Locals {
 			auth: AuthRequest;
 			session: LuciaSession | null;
+			user: LuciaUser | null;
 		}
 		interface PageData {
 			session: LuciaSession | null;
@@ -22,6 +23,7 @@ declare global {
 /// <reference types="lucia" />
 declare global {
 	namespace Lucia {
+		type DatabaseUser = User;
 		type Auth = LuciaAuth;
 		// eslint-disable-next-line @typescript-eslint/no-empty-interface
 		type DatabaseUserAttributes = Omit<User, 'id'>;

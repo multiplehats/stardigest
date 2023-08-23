@@ -31,8 +31,12 @@
 
 <DropdownMenu.Root positioning={{ placement: 'bottom-end' }}>
 	<DropdownMenu.Trigger asChild let:builder>
-		<Button variant="ghost" builders={[builder]} class="relative h-8 w-8 rounded-full">
-			<Avatar.Root class="h-8 w-8">
+		<Button
+			variant="ghost"
+			builders={[builder]}
+			class="relativew-7 h-7  sm:h-8 sm:w-8 rounded-full"
+		>
+			<Avatar.Root class="w-7 h-7 sm:h-8 sm:w-8">
 				<Avatar.Image
 					src="https://github.com/{user.githubUsername}.png?size=64"
 					alt={user.githubUsername ? user.githubUsername : 'avatar'}

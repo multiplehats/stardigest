@@ -6,6 +6,7 @@ import type { LuciaDatabaseUserAttributes, LuciaUser } from '@lucia-auth/oauth/d
 import { auth } from '$lib/server/lucia';
 import { ACCESS_TOKEN_SECRET } from '$env/static/private';
 import * as crypto from 'crypto';
+import { TIMEZONE, WEEKDAY } from '$lib/types';
 
 export const encryptAccessToken = (token: string): string => {
 	const ENCRYPTION_KEY = Buffer.from(ACCESS_TOKEN_SECRET, 'hex'); // use Buffer to convert hex string to Uint8Array
@@ -59,7 +60,10 @@ export const defaultUserCreateAttributes = (userId: string) =>
 		github_refresh_token: null,
 		github_token_expires_at: null,
 		github_token_updated_at: null,
-		policy: defaultUserPolicy(userId)
+		policy: defaultUserPolicy(userId),
+		day: WEEKDAY.FRIDAY.toString(),
+		timezone: TIMEZONE['America/Los_Angeles'],
+		emailNewsletter: null
 	} satisfies Omit<User, 'id' | 'email'>);
 
 export const getUserForOAuth = async ({
@@ -83,9 +87,6 @@ export const getUserForOAuth = async ({
 	github_tokens: GithubOAuthTokens;
 }) => {
 	if (existingUser) {
-		// If no policy exists, create one.
-
-		// @ts-expect-error - TODO: Fix this type in the global namespace
 		if (!existingUser?.policy) {
 			const policy = defaultUserPolicy(existingUser.userId);
 
@@ -106,6 +107,7 @@ export const getUserForOAuth = async ({
 			name: name,
 			email: email,
 			emailVerified: emailVerified,
+			emailNewsletter: email,
 			github_username: github_username,
 			github_access_token: encryptAccessToken(github_tokens.accessToken),
 			github_token_expires_at: github_tokens?.accessTokenExpiresIn

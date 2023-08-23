@@ -74,7 +74,6 @@
 		isLoading = true;
 		// do something
 		const authUrl = createAuthUrl(provider.id);
-		console.log('authUrl', authUrl);
 		signinWindow(authUrl, provider.id);
 		isLoading = false;
 	}

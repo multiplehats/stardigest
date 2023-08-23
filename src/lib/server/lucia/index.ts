@@ -7,6 +7,7 @@ import { github } from '@lucia-auth/oauth/providers';
 import { createClientRedirectUri } from '$lib/auth/utils';
 import { PROVIDER_ID } from '$lib/auth/types';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
+import { defaultUserPolicy } from './utils';
 
 export const auth = lucia({
 	adapter: planetscale(ps, {
@@ -18,6 +19,11 @@ export const auth = lucia({
 	env: dev ? 'DEV' : 'PROD',
 	getUserAttributes: (data) => {
 		return {
+			id: data.id,
+			policy: data?.policy ?? defaultUserPolicy(data.id),
+			timezone: data.timezone,
+			day: data.day,
+			emailNewsletter: data.emailNewsletter,
 			githubUsername: data.github_username,
 			userId: data.id,
 			name: data.name,

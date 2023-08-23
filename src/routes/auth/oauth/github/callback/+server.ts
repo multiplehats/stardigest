@@ -58,12 +58,14 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 	} catch (e) {
 		if (e instanceof OAuthRequestError) {
 			// invalid code
-			console.error('Invalid code');
+			console.error(`[${e.response.status}]: Github callback error`);
 
 			return new Response(null, {
 				status: 400
 			});
 		}
+
+		console.error('Github callback error', e);
 
 		return new Response(null, {
 			status: 500

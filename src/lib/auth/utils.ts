@@ -21,8 +21,6 @@ export const createAuthUrl = (provider: PROVIDER_ID) => {
 
 	const url = new URL(`${APP_URL}${AUTH_PATH}/oauth/${provider}`);
 
-	console.log(url.toString());
-
 	return url.toString();
 };
 
@@ -49,6 +47,7 @@ export const createServerRedirectUri = (provider: PROVIDER_ID, params?: URLSearc
  */
 export const createClientRedirectUri = (provider: PROVIDER_ID, params?: URLSearchParams) => {
 	const url = new URL(`${APP_URL}${AUTH_PATH}/oauth/${provider}/client-callback`);
+
 	if (params) url.search = params.toString();
 	return url.toString();
 };

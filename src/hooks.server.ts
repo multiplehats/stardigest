@@ -14,6 +14,10 @@ const auth_handle: Handle = async ({ event, resolve }) => {
 	event.locals.auth = auth.handleRequest(event);
 	event.locals.session = await event.locals.auth.validate();
 
+	if (event.locals.session) {
+		event.locals.user = event.locals.session.user;
+	}
+
 	return resolve(event);
 };
 

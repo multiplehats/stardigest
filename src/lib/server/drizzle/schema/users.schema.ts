@@ -1,5 +1,4 @@
 import { relations } from 'drizzle-orm';
-
 import {
 	mysqlTable,
 	index,
@@ -7,10 +6,15 @@ import {
 	varchar,
 	datetime,
 	bigint,
-	timestamp
+	timestamp,
+	mysqlEnum,
+	boolean
 } from 'drizzle-orm/mysql-core';
 import { POLICY_LENGTH, USER_ID_LENGTH } from '../constants';
-import { newsletter } from './newsletter.schema';
+import { TIMEZONE, WEEKDAY } from '../../../types';
+
+const timezones = Object.values(TIMEZONE) as [string, ...string[]];
+const weekdays = Object.values(WEEKDAY) as [string, ...string[]];
 
 export const users = mysqlTable(
 	'users',
@@ -26,7 +30,11 @@ export const users = mysqlTable(
 		github_access_token: varchar('github_access_token', { length: 255 }),
 		github_refresh_token: varchar('github_refresh_token', { length: 255 }),
 		github_token_expires_at: timestamp('github_token_expires_at'),
-		github_token_updated_at: timestamp('github_token_updated_at')
+		github_token_updated_at: timestamp('github_token_updated_at'),
+		// Settings
+		timezone: mysqlEnum('timezone', timezones).notNull(),
+		day: mysqlEnum('day', weekdays).notNull(),
+		emailNewsletter: varchar('emailNewsletter', { length: 320 })
 	},
 	(table) => {
 		return {
@@ -67,7 +75,3 @@ export const keys = mysqlTable(
 		};
 	}
 );
-
-export const userRelations = relations(users, ({ one }) => ({
-	newsletter: one(newsletter)
-}));
