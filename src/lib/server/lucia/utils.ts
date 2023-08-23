@@ -4,6 +4,23 @@ import { Policy, type GRID } from '$lib/auth/policies';
 import type { User } from '$lib/server/drizzle';
 import type { LuciaDatabaseUserAttributes, LuciaUser } from '@lucia-auth/oauth/dist/lucia';
 import { auth } from '$lib/server/lucia';
+import { ACCESS_TOKEN_SECRET } from '$env/static/private';
+import * as crypto from 'crypto';
+
+export const encryptAccessToken = (token: string): string => {
+	const cipher = crypto.createCipheriv('aes-256-ctr', ACCESS_TOKEN_SECRET, ACCESS_TOKEN_SECRET);
+	const encrypted = Buffer.concat([cipher.update(token), cipher.final()]);
+
+	return encrypted.toString('hex');
+};
+
+export const decryptAccessToken = (token: string): string => {
+	const decipher = crypto.createDecipheriv('aes-256-ctr', ACCESS_TOKEN_SECRET, ACCESS_TOKEN_SECRET);
+	const arrayBuffer = Buffer.from(token, 'hex');
+	const decrypted = Buffer.concat([decipher.update(arrayBuffer), decipher.final()]);
+
+	return decrypted.toString();
+};
 
 /**
  * Generate a default policy for the user.
@@ -55,8 +72,6 @@ export const getUserForOAuth = async ({
 	github_username: string;
 	github_tokens: GithubOAuthTokens;
 }) => {
-	console.log('github tokens', github_tokens);
-
 	if (existingUser) {
 		// If no policy exists, create one.
 
@@ -81,7 +96,7 @@ export const getUserForOAuth = async ({
 			name: name,
 			email: email,
 			emailVerified: emailVerified,
-			github_access_token: github_tokens.accessToken,
+			github_access_token: encryptAccessToken(github_tokens.accessToken),
 			github_token_expires_at: github_tokens?.accessTokenExpiresIn
 				? new Date(Date.now() + github_tokens.accessTokenExpiresIn * 1000)
 				: null,
