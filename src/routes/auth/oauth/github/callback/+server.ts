@@ -56,13 +56,16 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 			}
 		});
 	} catch (e) {
-		console.error(e);
+
 		if (e instanceof OAuthRequestError) {
 			// invalid code
+			console.error('Invalid code');
+
 			return new Response(null, {
 				status: 400
 			});
 		}
+
 		return new Response(null, {
 			status: 500
 		});
