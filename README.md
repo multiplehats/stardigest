@@ -1,6 +1,6 @@
 # StarDrip
 
-StarDrip is a simple automated newsletter designed for GitHub users. With an easy login through your GitHub account, you receive a weekly email letting you know about your GitHub stars. It's easy to forget what you've starred over the years - StarDrip serves as a reminder.
+Stardrip is a simple newsletter that sends you a weekly email with a random GitHub repository that you've starred. It's easy to forget what you've starred over the years - Stardrip serves as a reminder.
 
 ## Developing
 
