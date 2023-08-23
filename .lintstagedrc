@@ -1,6 +1,3 @@
 {
-	"src/**/*.{js,ts,svelte}": [
-		"pnpm format",
-		"pnpm lint",
-	],
+	"src/**/*.{js,ts,svelte}": ["pnpm format", "pnpm lint"]
 }
