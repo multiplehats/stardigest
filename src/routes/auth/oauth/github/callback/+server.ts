@@ -2,8 +2,9 @@ import { auth, githubOAuth } from '$lib/server/lucia';
 import type { RequestHandler } from './$types';
 import { OAuthRequestError } from '@lucia-auth/oauth';
 import { STATE_COOKIE } from '$lib/auth/types';
-import { getUserForOAuth } from '$lib/server/lucia/utils';
+import { maybeCreateUser } from '$lib/server/lucia/utils';
 import { SETTINGS_PATH } from '$lib/config/routes';
+import { discordNotify } from '$lib/server/discord';
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get(STATE_COOKIE.GITHUB_OAUTH_STATE);
@@ -33,7 +34,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const { existingUser, githubUser, createUser, githubTokens } =
 			await githubOAuth.validateCallback(code);
 
-		const user = await getUserForOAuth({
+		const user = await maybeCreateUser({
 			createUser,
 			existingUser,
 			name: githubUser.name,
@@ -48,7 +49,38 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 			attributes: {}
 		});
 
+		console.log('Session created', session);
+
 		locals.auth.setSession(session);
+
+		await discordNotify
+			.send('New session', {
+				description: `A new session has been created for ${user.name} [${user.id}]`,
+				type: 'success',
+				fields: [
+					{
+						name: 'User: ID',
+						value: user.id,
+						inline: true
+					},
+					{
+						name: 'Github',
+						value: `${user.githubUsername ?? 'N/A'}`,
+						inline: true
+					},
+					{
+						name: '↴',
+						value: discordNotify.markdownLink({
+							url: `https://github.com/${user.githubUsername}`,
+							text: 'View Github profile'
+						}),
+						inline: true
+					}
+				]
+			})
+			.catch((error) => {
+				console.error('Failed to send Discord notification', error);
+			});
 
 		return new Response(null, {
 			status: 302,

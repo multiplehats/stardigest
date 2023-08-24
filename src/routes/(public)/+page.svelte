@@ -46,8 +46,8 @@
 				</h1>
 
 				<p class="mt-6 text-lg leading-8">
-					Stop forgetting about your Github stars — receive a weekly email summary of your new and
-					forgotten Github stars.
+					Stardrip is a simple newsletter that sends you a weekly email with random GitHub
+					repositories that you've starred in the past.
 				</p>
 
 				<div class="mt-10 flex items-center gap-x-6">

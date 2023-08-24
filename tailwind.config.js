@@ -1,5 +1,6 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import tailwindcssAnimate from 'tailwindcss-animate';
+import animatePlugin from 'tailwindcss-animate';
+import typograhyPlugin from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -59,7 +60,7 @@ const config = {
 			}
 		}
 	},
-	plugins: [tailwindcssAnimate]
+	plugins: [animatePlugin, typograhyPlugin]
 };
 
 export default config;

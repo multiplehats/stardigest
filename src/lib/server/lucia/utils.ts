@@ -8,6 +8,7 @@ import { ACCESS_TOKEN_SECRET } from '$env/static/private';
 import * as crypto from 'crypto';
 import { TIMEZONE, WEEKDAY } from '$lib/types';
 import { NewsletterService } from '$lib/services/newsletter';
+import { discordNotify } from '../discord';
 
 export const encryptAccessToken = (token: string): string => {
 	const ENCRYPTION_KEY = Buffer.from(ACCESS_TOKEN_SECRET, 'hex'); // use Buffer to convert hex string to Uint8Array
@@ -67,7 +68,7 @@ export const defaultUserCreateAttributes = (userId: string) =>
 		emailNewsletter: null
 	} satisfies Omit<User, 'id' | 'email'>);
 
-export const getUserForOAuth = async ({
+export const maybeCreateUser = async ({
 	existingUser,
 	createUser,
 	name,
@@ -120,8 +121,36 @@ export const getUserForOAuth = async ({
 		}
 	});
 
-	const newsletter = new NewsletterService(user.id);
+	await discordNotify
+		.send('New user', {
+			description: `A new user has signed up: ${user.name} [${user.id}]`,
+			type: 'success',
+			fields: [
+				{
+					name: 'User: ID',
+					value: user.id,
+					inline: true
+				},
+				{
+					name: 'Github',
+					value: `${user.githubUsername ?? 'N/A'}`,
+					inline: true
+				},
+				{
+					name: '↴',
+					value: discordNotify.markdownLink({
+						url: `https://github.com/${user.githubUsername}`,
+						text: 'View Github profile'
+					}),
+					inline: true
+				}
+			]
+		})
+		.catch((error) => {
+			console.error('Failed to send Discord notification', error);
+		});
 
+	const newsletter = new NewsletterService(user.id);
 	await newsletter.subscribe({
 		email: email,
 		timezone: user.timezone as TIMEZONE,
