@@ -103,8 +103,6 @@ export class NewsletterService {
 		day: WEEKDAY;
 	}) {
 		const cron = await this.getSchedule(timezone, day);
-		console.log('cron', cron);
-		console.log('callback', this.callback);
 
 		try {
 			const { scheduleId } = await this.qstash.publishJSON({
