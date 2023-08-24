@@ -77,8 +77,8 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		return new Response();
 	} catch (error) {
-		console.error(error);
+		const e = error as { message: string } | undefined;
 
-		return new Response(error.message, { status: 200 });
+		return new Response(e?.message ?? 'Internal server error', { status: 200 });
 	}
 };
