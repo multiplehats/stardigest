@@ -59,7 +59,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const html = await renderAsync(
 		React.createElement(Email, {
-			username: 'chrisjayden',
+			username: user.github_username ?? user.name ?? 'you',
 			starredRepos: stars
 		} satisfies {
 			username: string;
@@ -69,7 +69,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	await sendgrid.sendMail({
 		to: user.email,
-		from: 'hi@stardrip.app',
 		subject: 'Your daily dose of stars',
 		html: html,
 		text: 'Your daily dose of stars'

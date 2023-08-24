@@ -1,3 +1,4 @@
+import { APP_NAME, SENDGRID_SENDER } from '$lib/config/constants';
 import { Client } from '@sendgrid/client';
 import type { ClientRequest } from '@sendgrid/client/src/request';
 import type { ResponseError } from '@sendgrid/helpers/classes';
@@ -53,13 +54,11 @@ class SendgridService {
 
 	async sendMail({
 		to,
-		from,
 		subject,
 		text,
 		html
 	}: {
 		to: string;
-		from: string;
 		subject: string;
 		html: string;
 		text?: string;
@@ -76,7 +75,8 @@ class SendgridService {
 				}
 			],
 			from: {
-				email: from
+				name: APP_NAME,
+				email: SENDGRID_SENDER
 			},
 			content: [
 				{
