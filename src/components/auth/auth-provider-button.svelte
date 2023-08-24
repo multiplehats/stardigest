@@ -72,10 +72,8 @@
 
 	function handleSignin() {
 		isLoading = true;
-		// do something
 		const authUrl = createAuthUrl(provider.id);
-		console.log(authUrl);
-		// signinWindow(authUrl, provider.id);
+		signinWindow(authUrl, provider.id);
 		isLoading = false;
 	}
 </script>
