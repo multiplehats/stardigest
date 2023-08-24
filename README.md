@@ -1,6 +1,6 @@
-# StarDrip
+# StarDigest
 
-Stardrip is a simple newsletter that sends you a weekly email with a random GitHub repository that you've starred. It's easy to forget what you've starred over the years - Stardrip serves as a reminder.
+StarDigest is a simple newsletter that sends you a weekly email with a random GitHub repository that you've starred. It's easy to forget what you've starred over the years - StarDigest serves as a reminder.
 
 ## Developing
 
