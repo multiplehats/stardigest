@@ -78,7 +78,13 @@
 	}
 </script>
 
-<Button variant="outline" type="button" disabled={isLoading} on:click={() => handleSignin()}>
+<Button
+	variant="outline"
+	size="lg"
+	type="button"
+	disabled={isLoading}
+	on:click={() => handleSignin()}
+>
 	{#if isLoading}
 		<Icons.spinner class="mr-2 h-4 w-4 animate-spin" />
 	{:else}

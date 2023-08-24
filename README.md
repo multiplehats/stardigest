@@ -21,4 +21,8 @@ To create a production version of your app:
 pnpm run build
 ```
 
+## Acknowledgements
+
+- [lil shapes](https://www.figma.com/community/file/1222735604132462255/lil-shapes-%E2%80%A2-2023.4) - For the logo icon
+
 You can preview the production build with `pnpm run preview`.
