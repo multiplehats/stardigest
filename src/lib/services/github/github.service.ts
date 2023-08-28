@@ -90,7 +90,7 @@ export class GithubService {
 		return this.formatStars(stars.data);
 	}
 
-	async getUniqueRandomStars(perPage = 8): Promise<UserStar[]> {
+	async getUniqueRandomStars(perPage = 5): Promise<UserStar[]> {
 		try {
 			const stars = await this.getRandomStars(perPage);
 			const uniqueStars: UserStar[] = [];

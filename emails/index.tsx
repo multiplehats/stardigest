@@ -5,7 +5,9 @@ import {
 	Head,
 	Heading,
 	Html,
+	Img,
 	Link,
+	Column,
 	Preview,
 	Row,
 	Section,
@@ -14,6 +16,7 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 import { UserStar } from '../src/lib/services/github/types';
+import { fauxStars } from './email-config';
 
 interface GithubStarredRepoEmailProps {
 	username: string;
@@ -22,79 +25,7 @@ interface GithubStarredRepoEmailProps {
 
 export const GithubStarredRepoEmail = ({
 	username = 'multiplehats',
-	starredRepos = [
-		{
-			id: 1234,
-			description: 'web development, streamlined',
-			language: 'Javascript',
-			updatedAt: new Date().toISOString(),
-			stars: 15900,
-			url: 'https://github.com/sveltejs/kit',
-			owner: 'sveltejskit',
-			repo: 'kit'
-		},
-		// nextjs
-		{
-			id: 1235,
-			description: 'The React Framework for Production',
-			language: 'Javascript',
-			updatedAt: new Date().toISOString(),
-			stars: 69000,
-			url: 'https://github.com/vercel/next.js',
-			owner: 'vercel',
-			repo: 'next.js'
-		},
-		{
-			id: 1236,
-			description: 'High performance node.js/PostgreSQL job queue',
-			language: 'JavaScript',
-			updatedAt: new Date().toISOString(),
-			stars: 2000,
-			url: 'https://github.com/graphile/worker',
-			owner: 'graphile',
-			repo: 'worker'
-		},
-		{
-			id: 1237,
-			description: 'Modern unit testing framework for JavaScript',
-			language: 'JavaScript',
-			updatedAt: new Date().toISOString(),
-			stars: 34700,
-			url: 'https://github.com/facebook/jest',
-			owner: 'facebook',
-			repo: 'jest'
-		},
-		{
-			id: 1238,
-			description: 'Fast and lightweight JavaScript library',
-			language: 'JavaScript',
-			updatedAt: new Date().toISOString(),
-			stars: 55000,
-			url: 'https://github.com/jquery/jquery',
-			owner: 'jquery',
-			repo: 'jquery'
-		},
-		{
-			id: 1239,
-			description: 'Visual primitive for React',
-			language: 'JavaScript',
-			updatedAt: new Date().toISOString(),
-			stars: 20500,
-			url: 'https://github.com/pmndrs/react-three-fiber',
-			owner: 'pmndrs',
-			repo: 'react-three-fiber'
-		},
-		{
-			id: 1240,
-			description: 'The world’s most popular framework for building responsive, mobile-first sites',
-			language: 'JavaScript',
-			updatedAt: new Date().toISOString(),
-			stars: 152000,
-			url: 'https://github.com/twbs/bootstrap',
-			owner: 'twbs',
-			repo: 'bootstrap'
-		}
-	]
+	starredRepos = fauxStars
 }: GithubStarredRepoEmailProps) => {
 	const previewText = `Most recent Github repos ${username} has starred`;
 
@@ -103,30 +34,49 @@ export const GithubStarredRepoEmail = ({
 			<Head />
 			<Preview>{previewText}</Preview>
 			<Tailwind>
-				<Body className="bg-black my-auto mx-auto font-sans">
-					<Container className="border border-solid border-[#212020] rounded my-[40px] mx-auto p-[20px] w-[465px]">
+				<Body className="bg-[#121212] my-auto mx-auto font-sans">
+					<Container className="my-[40px] mx-auto p-[20px] max-w-[580px] w-full">
 						<Section>
 							<Heading className="text-white text-[18px] font-bold text-center p-0 mb-[30px] mt-[18px] mx-0">
 								Here's your star digest {username}
 							</Heading>
 
 							{starredRepos.map((repo) => (
-								<Section key={repo.id} className="bg-[#020202] px-4 py-3 mb-[18px]">
-									<Heading className="text-white text-[18px] mt-[0px] mb-[5px]">
-										{repo.owner}/{repo.repo}
-									</Heading>
+								<Section
+									key={repo.id}
+									className="bg-[#1e1e1e] border-solid rounded-md border border-[#424241] w-auto px-4 py-3 mb-[30px]"
+								>
+									<Row className="mx-auto mb-[10px] align-top">
+										<Column align="left" className="align-top">
+											<Heading className="text-white text-[22px] mt-[0px] mb-[0px]">
+												{repo.owner}/{repo.repo}
+											</Heading>
 
-									<Text className="text-gray-400 text-[14px] mt-[0px] mb-[10px] leading-[24px]">
-										{repo.description}
-									</Text>
+											<Text className="text-gray-400 max-w-[400px] text-[14px] mt-[0px] mb-[0px] leading-[24px]">
+												{repo.description}
+											</Text>
+										</Column>
+
+										<Column align="right" className="align-top">
+											<Text className="text-gray-400 text-[14px] mt-[0px] mb-[0px]">
+												⭐️ {repo.stars}
+											</Text>
+										</Column>
+									</Row>
+
+									<Img
+										width={480}
+										className="w-full h-auto rounded-sm overflow-hidden mb-[20px]"
+										src="https://opengraph.githubassets.com/3b3e1c4b4b4b4b4b4b4b4b4b4b4b4b4b/multiplehats/stardrip"
+									/>
 
 									<Button
 										pX={16}
 										pY={8}
-										className="bg-[#1b1b1b] rounded text-white text-[12px] font-semibold no-underline text-center"
+										className="bg-[#d3ac5b] rounded text-white text-[12px] font-semibold no-underline text-center"
 										href={repo.url}
 									>
-										View on Github
+										Hop back in
 									</Button>
 								</Section>
 							))}
