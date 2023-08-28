@@ -23,15 +23,18 @@
 		<div class="flex flex-col items-center gap-8 xl:gap-16 lg:flex-row">
 			<div class="text-center md:max-w-2xl lg:text-left xl:shrink-0">
 				<div>
-					<div class="flex items-center justify-center lg:justify-start mb-8"><LogoFull /></div>
+					<div class="flex items-center justify-center lg:justify-start mt-12 sm:mt-0 sm:mb-8">
+						<LogoFull />
+					</div>
 
 					<h1 class="mt-10 text-4xl font-bold tracking-tight sm:text-6xl">
-						Your Github stars, delivered weekly.
+						Don't let your Github stars go to waste.
 					</h1>
 
-					<p class="mt-6 text-lg leading-8">
-						{APP_NAME} is a simple newsletter that sends you a weekly email with random GitHub repositories
-						that you've starred in the past.
+					<p class="mt-6 text-lg sm:text-xl leading-8">
+						{APP_NAME} is a newsletter that sends you a daily or weekly roundup with your starred Github
+						repo's (you know, so you don't forget about they exist). You don't have to lift a finger,
+						just star and we'll do the rest.
 					</p>
 				</div>
 

@@ -1,6 +1,6 @@
-# StarDigest
+# StarDigest - Don't let your Github stars go to waste
 
-StarDigest is a simple newsletter that sends you a weekly email with a random GitHub repository that you've starred. It's easy to forget what you've starred over the years - StarDigest serves as a reminder.
+StarDigest is a newsletter that sends you a daily or weekly roundup with your starred Github repo's (you know, so you don't forget about they exist). You don't have to lift a finger, just star and we'll do the rest.
 
 ## Developing
 
