@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Label } from '$components/ui/label';
-	import { Switch } from '$components/ui/switch';
 	import { Separator } from '$components/ui/separator';
 	import AppScheduleForm from '$components/app/app-general-settings-form.svelte';
 	import type { PageData } from './$types';

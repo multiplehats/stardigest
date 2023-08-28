@@ -1,13 +1,18 @@
 <script lang="ts">
 	import AuthForm from '$components/auth/auth-form.svelte';
 	import LogoFull from '$components/common/logo-full.svelte';
-	import { Badge } from '$components/ui/badge';
 	import { APP_NAME } from '$lib/config/constants';
-	import * as SplitPage from '$components/split-page';
 	import { onMount } from 'svelte';
+	import { MetaTags } from 'svelte-meta-tags';
+	import { defaultMetaTags } from '$lib/utils/metatags';
 
 	let htmlEmail: string;
 	let iframeEl: HTMLIFrameElement;
+
+	const title = "Don't let your Github stars go to waste.";
+	const description = `{APP_NAME} is a newsletter that sends you a daily or weekly roundup with your starred Github
+						repo's (you know, so you don't forget about they exist). You don't have to lift a finger,
+						just star and we'll do the rest.`;
 
 	onMount(async () => {
 		const html = await fetch('/api/example').then((res) => res.text());
@@ -17,6 +22,13 @@
 		iframeEl.srcdoc = `${htmlEmail}`;
 	});
 </script>
+
+<MetaTags
+	{...defaultMetaTags({
+		title,
+		description
+	})}
+/>
 
 <section class="min-h-screen flex items-center">
 	<div class="container">
@@ -28,13 +40,11 @@
 					</div>
 
 					<h1 class="mt-10 text-4xl font-bold tracking-tight sm:text-6xl">
-						Don't let your Github stars go to waste.
+						{title}
 					</h1>
 
 					<p class="mt-6 text-lg sm:text-xl leading-8">
-						{APP_NAME} is a newsletter that sends you a daily or weekly roundup with your starred Github
-						repo's (you know, so you don't forget about they exist). You don't have to lift a finger,
-						just star and we'll do the rest.
+						{description}
 					</p>
 				</div>
 

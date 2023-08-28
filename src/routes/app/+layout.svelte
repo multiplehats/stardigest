@@ -11,6 +11,10 @@
 	];
 </script>
 
+<svelte:head>
+	<meta name="robots" content="noindex" />
+</svelte:head>
+
 <Header />
 
 <section class="pt-8 pb-16">

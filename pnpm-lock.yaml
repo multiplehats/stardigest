@@ -166,6 +166,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.4.3
     version: 3.5.0(postcss-load-config@4.0.1)(postcss@8.4.28)(svelte@4.2.0)
+  svelte-meta-tags:
+    specifier: ^3.0.3
+    version: 3.0.3(svelte@4.2.0)(typescript@5.1.6)
   sveltekit-superforms:
     specifier: ^1.6.1
     version: 1.6.1(@sveltejs/kit@1.22.6)(svelte@4.2.0)(zod@3.22.2)
@@ -5690,6 +5693,14 @@ packages:
     dependencies:
       loose-envify: 1.4.0
 
+  /schema-dts@1.1.2(typescript@5.1.6):
+    resolution: {integrity: sha512-MpNwH0dZJHinVxk9bT8XUdjKTxMYrA5bLtrrGmFA6PTLwlOKnhi67XoRd6/ty+Djt6ZC0slR57qFhZDNMI6DhQ==}
+    peerDependencies:
+      typescript: '>=4.1.0'
+    dependencies:
+      typescript: 5.1.6
+    dev: true
+
   /selderee@0.10.0:
     resolution: {integrity: sha512-DEL/RW/f4qLw/NrVg97xKaEBC8IpzIG2fvxnzCp3Z4yk4jQ3MXom+Imav9wApjxX2dfS3eW7x0DXafJr85i39A==}
     dependencies:
@@ -6030,6 +6041,17 @@ packages:
       svelte: ^3.19.0 || ^4.0.0
     dependencies:
       svelte: 4.2.0
+    dev: true
+
+  /svelte-meta-tags@3.0.3(svelte@4.2.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-av5B6MQb1ujpM11GOYj9PDridXYJmWWJdfQvtJivFDeEc7t4Xh0hBQqcL5oEONd4Tt8UjSi0cIQG0mshTM4s+A==}
+    peerDependencies:
+      svelte: ^3.55.0 || ^4.0.0
+    dependencies:
+      schema-dts: 1.1.2(typescript@5.1.6)
+      svelte: 4.2.0
+    transitivePeerDependencies:
+      - typescript
     dev: true
 
   /svelte-preprocess@5.0.4(postcss-load-config@4.0.1)(postcss@8.4.28)(svelte@4.2.0)(typescript@5.1.6):
