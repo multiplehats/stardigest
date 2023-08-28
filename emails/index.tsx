@@ -28,7 +28,8 @@ export const GithubStarredRepoEmail = ({
 	starredRepos = fauxStars
 }: GithubStarredRepoEmailProps) => {
 	const previewText = `Most recent Github repos ${username} has starred`;
-
+	const now = Date.now();
+	const ogHash = now.toString(36);
 	return (
 		<Html>
 			<Head />
@@ -41,25 +42,25 @@ export const GithubStarredRepoEmail = ({
 								Here's your star digest {username}
 							</Heading>
 
-							{starredRepos.map((repo) => (
+							{starredRepos.map(({ id, owner, repo, description, stars, url }) => (
 								<Section
-									key={repo.id}
+									key={id}
 									className="bg-[#1e1e1e] border-solid rounded-md border border-[#424241] w-auto px-4 py-3 mb-[30px]"
 								>
 									<Row className="mx-auto mb-[10px] align-top">
 										<Column align="left" className="align-top">
 											<Heading className="text-white text-[22px] mt-[0px] mb-[0px]">
-												{repo.owner}/{repo.repo}
+												{owner}/{repo}
 											</Heading>
 
 											<Text className="text-gray-400 max-w-[400px] text-[14px] mt-[0px] mb-[0px] leading-[24px]">
-												{repo.description}
+												{description}
 											</Text>
 										</Column>
 
 										<Column align="right" className="align-top">
 											<Text className="text-gray-400 text-[14px] mt-[0px] mb-[0px]">
-												⭐️ {repo.stars}
+												⭐️ {stars}
 											</Text>
 										</Column>
 									</Row>
@@ -67,14 +68,14 @@ export const GithubStarredRepoEmail = ({
 									<Img
 										width={480}
 										className="w-full h-auto rounded-sm overflow-hidden mb-[20px]"
-										src="https://opengraph.githubassets.com/3b3e1c4b4b4b4b4b4b4b4b4b4b4b4b4b/multiplehats/stardrip"
+										src={`https://opengraph.githubassets.com/${ogHash}/${owner}/${repo}`}
 									/>
 
 									<Button
 										pX={16}
 										pY={8}
 										className="bg-[#d3ac5b] rounded text-white text-[12px] font-semibold no-underline text-center"
-										href={repo.url}
+										href={url}
 									>
 										Hop back in
 									</Button>
