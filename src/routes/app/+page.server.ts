@@ -8,13 +8,13 @@ import { UserService } from '$lib/services/users';
 import { ErrorCode } from '$lib/utils/error-class';
 import { NewsletterService } from '$lib/services/newsletter';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ request, locals }) => {
 	const { user } = locals;
 	const { email, emailNewsletter, day } = user || {};
-	const newsletterService = new NewsletterService(user.id);
+	const newsletterService = new NewsletterService({ request, locals });
 	const defaultEmail = email || emailNewsletter || undefined;
 	const defaultDay = day ? (Number(day) as unknown as WEEKDAY) : undefined;
-	const isSubscribed = await newsletterService.isSubscribed();
+	const isSubscribed = await newsletterService.isSubscribed(user.id);
 
 	return {
 		form: await superValidate(
@@ -61,6 +61,7 @@ export const actions = {
 			if (enabled) {
 				console.log('subscribing', { email });
 				await newsletterService.subscribe({
+					userId: user.id,
 					email,
 					// TODO: Implement timezone
 					timezone: user.timezone,
@@ -68,7 +69,7 @@ export const actions = {
 				});
 			} else {
 				console.log('unsubscribing', { email });
-				await newsletterService.unsubscribe();
+				await newsletterService.unsubscribe(user.id);
 			}
 		} catch (error) {
 			if (error instanceof ErrorCode) {

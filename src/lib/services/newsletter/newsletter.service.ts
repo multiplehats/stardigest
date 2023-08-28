@@ -7,44 +7,52 @@ import { API_PATH } from '$lib/config/routes';
 import type { TIMEZONE, WEEKDAY } from '$lib/types';
 import type { ZQstashNewsletterCallback } from './types';
 import { ZonedDateTime, ZoneId } from '@js-joda/core';
+import { AppService } from '$lib/services/app/app.service';
+import { EmailService } from '$lib/services/email/email.service';
+import { decryptAccessToken } from '$lib/server/lucia/utils';
+import { db } from '$lib/server/drizzle/db';
+import { eq } from 'drizzle-orm';
+import { schema } from '$lib/server/drizzle';
+import { GithubService } from '../github';
 import '@js-joda/timezone';
 
-export class NewsletterService {
+export class NewsletterService extends AppService {
 	private qstash: QStashClient;
 	private redis: Redis;
-	private userId: string;
-	private callback: string;
+	private callbackUrl: string;
+	private email: EmailService;
 
-	constructor(userId: string) {
+	constructor({ request, locals }: { request: Request; locals: App.Locals }) {
+		super(request, locals);
+		this.email = new EmailService({ request, locals });
 		this.qstash = qstash;
 		this.redis = redis;
-		this.userId = userId;
-		this.callback = `${APP_URL}${API_PATH}/newsletter`;
+		this.callbackUrl = `${APP_URL}${API_PATH}/newsletter`;
 	}
 
 	/**
 	 * The schedule ID from Qstash is stored in Redis.
 	 */
-	private key() {
-		return `newsletter:${this.userId}`;
+	private key(userId: string) {
+		return `newsletter:${userId}`;
 	}
 
 	private async setKey(userId: string, messageId: string) {
-		return await this.redis.set(this.key(), messageId);
+		return await this.redis.set(this.key(userId), messageId);
 	}
 
-	private async hasKey() {
-		const exists = await this.redis.exists(this.key());
+	private async hasKey(userId: string) {
+		const exists = await this.redis.exists(this.key(userId));
 
 		return exists === 1;
 	}
 
-	private async deleteKey() {
-		return await this.redis.del(this.key());
+	private async deleteKey(userId: string) {
+		return await this.redis.del(this.key(userId));
 	}
 
-	private async getKey() {
-		return await this.redis.get<string>(this.key());
+	private async getKey(userId: string) {
+		return await this.redis.get<string>(this.key(userId));
 	}
 
 	private async getSchedule(timezone: TIMEZONE, day: WEEKDAY) {
@@ -61,12 +69,12 @@ export class NewsletterService {
 		return cron;
 	}
 
-	public async isSubscribed() {
-		return await this.hasKey();
+	public async isSubscribed(userId: string) {
+		return await this.hasKey(userId);
 	}
 
-	public async unsubscribe() {
-		const messageId = await this.getKey();
+	public async unsubscribe(userId: string) {
+		const messageId = await this.getKey(userId);
 
 		if (!messageId) {
 			return;
@@ -80,7 +88,7 @@ export class NewsletterService {
 			if (err.error.endsWith('not found')) {
 				// The message was already deleted
 				console.log('Message not found');
-				await this.deleteKey();
+				await this.deleteKey(userId);
 
 				return;
 			}
@@ -90,14 +98,16 @@ export class NewsletterService {
 			throw e;
 		}
 
-		await this.deleteKey();
+		await this.deleteKey(userId);
 	}
 
 	public async subscribe({
+		userId,
 		email,
 		timezone,
 		day
 	}: {
+		userId: string;
 		email: string;
 		timezone: TIMEZONE;
 		day: WEEKDAY;
@@ -106,17 +116,48 @@ export class NewsletterService {
 
 		try {
 			const { scheduleId } = await this.qstash.publishJSON({
-				url: this.callback,
+				url: this.callbackUrl,
 				cron: cron,
 				body: {
 					email: email,
-					userId: this.userId
+					userId: userId
 				} satisfies ZQstashNewsletterCallback
 			});
 
-			await this.setKey(this.userId, scheduleId);
+			await this.setKey(userId, scheduleId);
 		} catch (error) {
 			console.error('Failed to schedule QStash job', error);
 		}
+	}
+
+	public async send({ userId, email }: ZQstashNewsletterCallback) {
+		const user = await db.query.users.findFirst({
+			where: eq(schema.users.id, userId)
+		});
+
+		if (!user) {
+			console.error('User not found');
+
+			return new Response('User not found', { status: 200 });
+		}
+
+		if (!user.github_access_token) {
+			console.error('User has no github access token');
+
+			return new Response('User has no github access token', { status: 200 });
+		}
+
+		const accessToken = decryptAccessToken(user.github_access_token);
+		const githubService = new GithubService(accessToken, user.id);
+		const starredRepos = await githubService.getUniqueRandomStars();
+		const username = user.github_username ?? user.name ?? 'you';
+
+		if (!starredRepos || starredRepos.length === 0) {
+			this.log('User has no starred repos');
+
+			return new Response('User has no starred repos', { status: 200 });
+		}
+
+		return await this.email.sendNewsletter({ email, username, starredRepos });
 	}
 }

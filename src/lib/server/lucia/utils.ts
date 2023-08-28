@@ -7,7 +7,6 @@ import { auth } from '$lib/server/lucia';
 import { ACCESS_TOKEN_SECRET } from '$env/static/private';
 import * as crypto from 'crypto';
 import { TIMEZONE, WEEKDAY } from '$lib/types';
-import { NewsletterService } from '$lib/services/newsletter';
 import { discordNotify } from '../discord';
 
 export const encryptAccessToken = (token: string): string => {
@@ -149,13 +148,6 @@ export const maybeCreateUser = async ({
 		.catch((error) => {
 			console.error('Failed to send Discord notification', error);
 		});
-
-	const newsletter = new NewsletterService(user.id);
-	await newsletter.subscribe({
-		email: email,
-		timezone: user.timezone as TIMEZONE,
-		day: user.day as unknown as WEEKDAY
-	});
 
 	return user;
 };

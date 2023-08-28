@@ -1,18 +1,9 @@
-import { db } from '$lib/server/drizzle/db';
 import { validateQstashSignature } from '$lib/server/upstash/qstash';
 import { ZQstashNewsletterCbSchema } from '$lib/services/newsletter/types';
-import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
-import { schema } from '$lib/server/drizzle';
-import { GithubService, type UserStar } from '$lib/services/github';
-import { decryptAccessToken } from '$lib/server/lucia/utils';
-import { renderAsync } from '@react-email/components';
-// @ts-expect-error - jsx is not set in sveltekit apps
-import Email from '../../../../emails/index.tsx';
-import React from 'react';
-import { sendgrid } from '$lib/server/sendgrid';
+import { NewsletterService } from '$lib/services/newsletter';
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	const isValid = await validateQstashSignature(request);
 
 	if (!isValid) {
@@ -31,49 +22,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		return new Response();
 	}
 
+	const { userId, email } = data.data;
+
 	try {
-		const user = await db.query.users.findFirst({
-			where: eq(schema.users.id, data.data.userId)
-		});
+		const newsletterService = new NewsletterService({ request, locals });
 
-		if (!user) {
-			console.error('User not found');
-
-			return new Response('User not found', { status: 200 });
-		}
-
-		if (!user.github_access_token) {
-			console.error('User has no github access token');
-
-			return new Response('User has no github access token', { status: 200 });
-		}
-
-		const accessToken = decryptAccessToken(user.github_access_token);
-		const githubService = new GithubService(accessToken, user.id);
-		const stars = await githubService.getUniqueRandomStars();
-
-		if (!stars || stars.length === 0) {
-			console.error('User has no stars');
-
-			return new Response('User has no stars', { status: 200 });
-		}
-
-		const html = await renderAsync(
-			React.createElement(Email, {
-				username: user.github_username ?? user.name ?? 'you',
-				starredRepos: stars
-			} satisfies {
-				username: string;
-				starredRepos: UserStar[];
-			})
-		);
-
-		await sendgrid.sendMail({
-			to: user.email,
-			subject: 'Your daily dose of stars',
-			html: html,
-			text: 'Your daily dose of stars'
-		});
+		await newsletterService.send({ userId, email });
 
 		return new Response();
 	} catch (error) {

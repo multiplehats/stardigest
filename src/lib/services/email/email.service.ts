@@ -2,13 +2,37 @@ import { APP_NAME, SENDGRID_SENDER } from '$lib/config/constants';
 import { Client } from '@sendgrid/client';
 import type { ClientRequest } from '@sendgrid/client/src/request';
 import type { ResponseError } from '@sendgrid/helpers/classes';
+import { AppService } from '$lib/services/app/app.service';
+import { SENDGRID_API_KEY } from '$env/static/private';
+import { dev } from '$app/environment';
+import { renderAsync } from '@react-email/components';
+import React from 'react';
 
-class SendgridService {
+// @ts-expect-error - jsx is not set in sveltekit apps
+import Email from '../../../../emails/index.tsx';
+import type { UserStar } from '../github/types.js';
+
+export class EmailServiceError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'EmailServiceError';
+	}
+}
+
+export class EmailService extends AppService {
 	private clientService: Client;
 	private apiKey: string;
+	private defaultFrom: string;
+	private defaultSender: string;
+	private debug: boolean;
 
-	constructor(apiKey: string) {
-		this.apiKey = apiKey;
+	constructor({ request, locals }: { request: Request; locals: App.Locals }) {
+		super(request, locals);
+
+		this.debug = dev;
+		this.apiKey = SENDGRID_API_KEY;
+		this.defaultFrom = APP_NAME;
+		this.defaultSender = SENDGRID_SENDER;
 		this.clientService = new Client();
 		this.clientService.setApiKey(this.apiKey);
 	}
@@ -52,22 +76,27 @@ class SendgridService {
 		}
 	}
 
-	async sendMail({
+	private async send({
 		to,
+		name,
+		from,
 		subject,
-		text,
-		html
+		html,
+		plainText
 	}: {
 		to: string;
+		name?: string;
+		from?: string;
 		subject: string;
 		html: string;
-		text?: string;
+		plainText?: string;
 	}) {
 		const request = this.createRequest('POST', '/v3/mail/send', {
 			personalizations: [
 				{
 					to: [
 						{
+							name: name,
 							email: to
 						}
 					],
@@ -75,13 +104,13 @@ class SendgridService {
 				}
 			],
 			from: {
-				name: APP_NAME,
-				email: SENDGRID_SENDER
+				name: this.defaultFrom,
+				email: from ?? this.defaultSender
 			},
 			content: [
 				{
 					type: 'text/plain',
-					value: text
+					value: plainText
 				},
 				{
 					type: 'text/html',
@@ -91,6 +120,10 @@ class SendgridService {
 		});
 
 		try {
+			if (this.debug) {
+				return;
+			}
+			3;
 			const [response] = await this.clientService.request(request);
 			const body = response.body as { job_id: string };
 			let queued = false;
@@ -99,18 +132,43 @@ class SendgridService {
 				queued = true;
 			}
 
-			console.log(`Mail sent to ${to}`);
-
 			return {
 				jobId: body.job_id,
 				queued: queued
 			};
 		} catch (error) {
 			const err = error as ResponseError;
-
-			console.log(`Failed to send mail: ${err.message}`);
+			throw new EmailServiceError(err.message);
 		}
 	}
-}
 
-export default SendgridService;
+	public async sendNewsletter({
+		email,
+		username,
+		starredRepos
+	}: {
+		email: string;
+		username: string;
+		starredRepos: UserStar[];
+	}) {
+		const props = {
+			username,
+			starredRepos
+		} satisfies {
+			username: string;
+			starredRepos: UserStar[];
+		};
+
+		const [html, plainText] = await Promise.all([
+			renderAsync(React.createElement(Email, props)),
+			renderAsync(React.createElement(Email, props), { plainText: true })
+		]);
+
+		const mail = await this.send({
+			to: email,
+			subject: 'Your daily dose of stars',
+			html: html,
+			plainText
+		});
+	}
+}
