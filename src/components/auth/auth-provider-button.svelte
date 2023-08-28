@@ -79,7 +79,7 @@
 </script>
 
 <Button
-	variant="outline"
+	variant="secondary"
 	size="lg"
 	type="button"
 	disabled={isLoading}
