@@ -10,7 +10,7 @@
 	let iframeEl: HTMLIFrameElement;
 
 	const title = "Don't let your Github stars go to waste.";
-	const description = `{APP_NAME} is a newsletter that sends you a daily or weekly roundup with your starred Github
+	const description = `${APP_NAME} is a newsletter that sends you a daily or weekly roundup with your starred Github
 						repo's (you know, so you don't forget about they exist). You don't have to lift a finger,
 						just star and we'll do the rest.`;
 
