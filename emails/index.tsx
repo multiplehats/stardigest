@@ -30,6 +30,7 @@ export const GithubStarredRepoEmail = ({
 	const previewText = `Most recent Github repos ${username} has starred`;
 	const now = Date.now();
 	const ogHash = now.toString(36);
+
 	return (
 		<Html>
 			<Head />
@@ -38,6 +39,14 @@ export const GithubStarredRepoEmail = ({
 				<Body className="bg-[#121212] my-auto mx-auto font-sans">
 					<Container className="my-[40px] mx-auto p-[20px] max-w-[580px] w-full">
 						<Section>
+							<Img
+								src="https://www.stardigest.app/logo-email.png"
+								className="mx-auto mb-[30px]"
+								width="170"
+								height="50"
+								alt="Logo"
+							/>
+
 							<Heading className="text-white text-[18px] font-bold text-center p-0 mb-[30px] mt-[18px] mx-0">
 								Here's your star digest {username}
 							</Heading>
