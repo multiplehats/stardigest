@@ -11,24 +11,58 @@
 	import { PROVIDER_POST_MESSAGE_SOURCE } from '$lib/auth/constants';
 	import { onMount } from 'svelte';
 
-	let hasError = false;
-	let errorParams: string | null = null;
+	const errors = [
+		'access_denied',
+		'invalid_request',
+		'invalid_scope',
+		'server_error',
+		'temporarily_unavailable',
+		'unauthorized_client',
+		'unsupported_response_type'
+	] as const;
+	type Error = (typeof errors)[number];
 
+	const errorsDescriptions = {
+		access_denied: 'The user has denied your application access.',
+		invalid_request: 'Invalid request.',
+		invalid_scope: 'Invalid scope.',
+		server_error: 'Server error.',
+		temporarily_unavailable: 'Temporarily unavailable.',
+		unauthorized_client: 'Unauthorized client.',
+		unsupported_response_type: 'Unsupported response type.'
+	} satisfies Record<(typeof errors)[number], string>;
+
+	let hasError = false;
+	let errorParam: Error | null = null;
+	let errorDescParam: string | null = null;
+
+	function getErrorMessage(error: Error): string {
+		return errorsDescriptions[error];
+	}
+
+	// http://localhost:5173/auth/oauth/github/client-callback?error=access_denied&error_description=The+user+has+denied+your+application+access.&error_uri=https%3A%2F%2Fdocs.github.com%2Fapps%2Fmanaging-oauth-apps%2Ftroubleshooting-authorization-request-errors%2F%23access-denied&state=rb9dzu9le8hylbmc3y669se24x0ahj8m5zs4tq2qujw
 	onMount(() => {
 		const params = window.location.search;
-		errorParams = new URLSearchParams(params).get('error');
+		errorParam = new URLSearchParams(params).get('error') as Error | null;
+		errorDescParam = new URLSearchParams(params).get('error_description');
 
 		try {
+			if (errorParam) {
+				hasError = true;
+				return;
+			}
+
 			window.opener.postMessage(
 				{ source: PROVIDER_POST_MESSAGE_SOURCE, payload: { params } },
 				window.location.origin
 			);
 			window.close();
 		} catch (error) {
-			hasError = true;
 			console.error('Error posting message to parent:', error);
 		}
 	});
+
+	$: hasError = errorParam !== null;
 </script>
 
 <div class="min-h-screen flex flex-col items-center justify-center">
@@ -50,13 +84,14 @@
 				<Alert.Root>
 					<Icons.error class="h-4 w-4" />
 
-					<Alert.Title>Unable to redirect</Alert.Title>
+					<Alert.Title>
+						{errorParam}
+					</Alert.Title>
 
 					<Alert.Description>
-						<p class="mb-1">
-							Please ensure you don't have any pop-up blockers enabled or have disabled JavaScript.
+						<p>
+							{errorParam ? getErrorMessage(errorParam) : errorDescParam}
 						</p>
-						<p class="text-destructive">Error: {errorParams}</p>
 					</Alert.Description>
 				</Alert.Root>
 			{/if}

@@ -34,11 +34,19 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const { existingUser, githubUser, createUser, githubTokens } =
 			await githubOAuth.validateCallback(code);
 
+		if (!githubUser.email) {
+			console.error('Github user has no email');
+
+			return new Response('You must have an email associated with your Github account.', {
+				status: 400
+			});
+		}
+
 		const user = await maybeCreateUser({
 			createUser,
 			existingUser,
 			name: githubUser.name,
-			email: githubUser.email as string,
+			email: githubUser.email,
 			emailVerified: new Date(),
 			github_username: githubUser.login,
 			github_tokens: githubTokens
@@ -95,7 +103,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 			console.error(`[${e.response.status}]: Github callback error`);
 
 			return new Response(null, {
-				status: 400
+				status: e.response.status
 			});
 		}
 
