@@ -4,7 +4,7 @@ import { dev } from '$app/environment';
 
 export const pirsch = new PirschService(PIRSCH_API_KEY, {
 	enabled: dev ? false : true,
-	debug: dev,
+	debug: false,
 	hit: {
 		paramsToRemove: ['x-sveltekit-invalidated']
 	}

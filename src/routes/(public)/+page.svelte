@@ -17,7 +17,6 @@
 
 	onMount(async () => {
 		const html = await fetch('/api/example').then((res) => res.text());
-		console.log(html);
 		htmlEmail = html;
 
 		iframeEl.srcdoc = `${htmlEmail}`;

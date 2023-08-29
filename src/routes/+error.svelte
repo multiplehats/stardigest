@@ -1,21 +1,21 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Logo from '$components/common/logo.svelte';
+	import LogoFull from '$components/common/logo-full.svelte';
 	import { buttonVariants } from '$components/ui/button';
 	import { cn } from '$lib/utils';
 
 	$: ({ error, status } = $page);
 </script>
 
-<main class="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+<main class="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
 	<div class="text-center">
 		<a href="/" class="inline-flex mb-8">
 			<span class="sr-only">jobseeqr</span>
 
-			<Logo class="h-18" />
+			<LogoFull class="h-18" />
 		</a>
 
-		<h1 class="mt-2 text-5xl lowercase sm:text-6xl">
+		<h1 class="mt-2 text-5xl lowercase font-bold sm:text-6xl">
 			{#if error && status !== 404}
 				{error.message}
 			{:else}

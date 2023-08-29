@@ -28,7 +28,7 @@ export const createPirschPageView = () => {
 	if (!browser) return;
 
 	page.subscribe((page) => {
-		if (!page) return;
+		if (!page || Object.keys(page).length === 0) return;
 
 		const payload = {
 			url: page.url.href,
