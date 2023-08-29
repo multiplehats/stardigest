@@ -5,7 +5,7 @@ import type { ResponseError } from '@sendgrid/helpers/classes';
 import { AppService } from '$lib/services/app/app.service';
 import { SENDGRID_API_KEY } from '$env/static/private';
 import { dev } from '$app/environment';
-import { renderAsync } from '@react-email/components/dist/index';
+import { renderAsync } from '@react-email/components';
 import React from 'react';
 
 // @ts-expect-error - jsx is not set in sveltekit apps
