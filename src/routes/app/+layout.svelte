@@ -2,6 +2,7 @@
 	import Sidenav from '$components/app/app-main-settings-sidenav.svelte';
 	import Header from '$components/common/header.svelte';
 	import { Separator } from '$components/ui/separator';
+	import { APP_NAME } from '$lib/config/constants';
 
 	const sidebarNavItems = [
 		{
@@ -13,6 +14,7 @@
 
 <svelte:head>
 	<meta name="robots" content="noindex" />
+	<title>App • {APP_NAME}</title>
 </svelte:head>
 
 <Header />
