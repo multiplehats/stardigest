@@ -11,3 +11,5 @@ vite.config.ts.timestamp-*
 .vercel
 ## React Email
 .react-email
+
+.pscale.yml
