@@ -1,12 +1,11 @@
 import type { RequestHandler } from './$types';
-
 // @ts-expect-error - jsx is not set in sveltekit apps
 import Email from '../../../../emails/index.tsx';
 import React from 'react';
-import { renderAsync, render } from '@react-email/render';
+import { renderAsync } from '@react-email/components/dist/index';
 
 export const GET: RequestHandler = async () => {
-	const emailHtml = render(React.createElement(Email));
+	const emailHtml = await renderAsync(React.createElement(Email));
 
 	return new Response(emailHtml, {
 		headers: {

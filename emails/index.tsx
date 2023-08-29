@@ -13,7 +13,7 @@ import {
 	Section,
 	Tailwind,
 	Text
-} from '@react-email/components';
+} from '@react-email/components/dist/index';
 import * as React from 'react';
 import { UserStar } from '../src/lib/services/github/types';
 import { fauxStars } from './email-config';
