@@ -5,7 +5,8 @@
 	import { onMount } from 'svelte';
 	import { MetaTags } from 'svelte-meta-tags';
 	import { defaultMetaTags } from '$lib/utils/metatags';
-
+	import { badgeVariants } from '$components/ui/badge';
+	import { Github } from 'lucide-svelte';
 	let htmlEmail: string;
 	let iframeEl: HTMLIFrameElement;
 
@@ -38,6 +39,20 @@
 					<div class="flex items-center justify-center lg:justify-start mt-12 sm:mt-0 sm:mb-8">
 						<LogoFull />
 					</div>
+
+					<a
+						href="https://github.com/multiplehats/stardigest"
+						class={badgeVariants({
+							variant: 'outline'
+						})}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<div class="flex items-center justify-center gap-1">
+							<Github class="h-3 w-3" />
+							<span>View on Github</span>
+						</div>
+					</a>
 
 					<h1 class="mt-10 text-4xl font-bold tracking-tight sm:text-6xl">
 						{title}
